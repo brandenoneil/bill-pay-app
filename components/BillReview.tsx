@@ -5,6 +5,13 @@ import { CheckCircle2, ExternalLink, X, ShieldAlert, Edit2, Check } from 'lucide
 import { Bill, ExtractedBill } from '@/types/bill'
 import { generateId } from '@/lib/storage'
 
+function normalizeUrl(url: string): string {
+  if (!url) return ''
+  const trimmed = url.trim()
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) return trimmed
+  return `https://${trimmed}`
+}
+
 interface Props {
   billData: { extractedData: ExtractedBill; imageDataUrl: string }
   onSave: (bill: Bill) => void
@@ -148,7 +155,7 @@ export default function BillReview({ billData, onSave, onDiscard }: Props) {
                   />
                 ) : key === 'paymentUrl' && value ? (
                   <a
-                    href={value}
+                    href={normalizeUrl(value)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm flex items-center gap-1 truncate"
@@ -203,7 +210,7 @@ export default function BillReview({ billData, onSave, onDiscard }: Props) {
         </button>
         {fields.paymentUrl && (
           <a
-            href={fields.paymentUrl}
+            href={normalizeUrl(fields.paymentUrl)}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium btn-pay"

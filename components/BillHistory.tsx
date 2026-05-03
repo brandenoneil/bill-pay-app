@@ -4,6 +4,13 @@ import { useState } from 'react'
 import { ExternalLink, CheckCircle, SkipForward, Trash2, ChevronDown, ChevronUp, ImageIcon } from 'lucide-react'
 import { Bill } from '@/types/bill'
 
+function normalizeUrl(url: string): string {
+  if (!url) return ''
+  const trimmed = url.trim()
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) return trimmed
+  return `https://${trimmed}`
+}
+
 interface Props {
   bills: Bill[]
   onMarkPaid: (id: string) => void
@@ -173,7 +180,7 @@ export default function BillHistory({ bills, onMarkPaid, onMarkSkipped, onDelete
                   <div className="px-5 py-4 flex items-center gap-2 flex-wrap">
                     {bill.extractedData.paymentUrl && (
                       <a
-                        href={bill.extractedData.paymentUrl}
+                        href={normalizeUrl(bill.extractedData.paymentUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs btn-pay"
